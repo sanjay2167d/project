@@ -1,0 +1,53 @@
+<div class="sidebar">
+
+    <img src="{{ url_for('static', filename='logo.jpg') }}" class="sidebar-logo">
+
+    <a href="{{ url_for('admin.welcome') }}">
+        🏠 Dashboard
+    </a>
+
+    <a href="{{ url_for('admin.add_user') }}">
+        👤 Add User
+    </a>
+
+    <a href="{{ url_for('admin.attendance') }}">
+        📅 Attendance
+    </a>
+
+    <a href="{{ url_for('admin.leave') }}">
+        📝 Leave Management
+    </a>
+
+    <a href="{{ url_for('admin.employee_list') }}">
+        👥 Employee List
+    </a>
+
+    <a href="{{ url_for('admin.settings') }}">
+        ⚙ Settings
+    </a>
+
+</div>
+
+
+
+
+
+
+
+
+
+<body>
+
+<div class="layout">
+
+    {% include "includes/sidebar.html" %}
+
+    <div class="main-content">
+
+        <!-- Page Content -->
+
+    </div>
+
+</div>
+
+</body>

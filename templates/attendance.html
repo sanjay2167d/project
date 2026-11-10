@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Attendance Management</title>
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet">
+
+<link rel="stylesheet"
+href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial,Helvetica,sans-serif;
+}
+
+body{
+background:#f4f4f4;
+}
+
+.navbar{
+background:#000;
+height:140px;
+display:flex;
+align-items:center;
+justify-content:space-between;
+padding:0 40px;
+position:relative;
+}
+
+.company-name{
+position:absolute;
+left:50%;
+transform:translateX(-50%);
+color:white;
+font-size:45px;
+font-weight:900;
+letter-spacing:8px;
+margin:0;
+text-align:center;
+white-space:nowrap;
+}
+
+.logout-btn{
+background:white;
+color:black;
+padding:10px 22px;
+border-radius:10px;
+text-decoration:none;
+font-weight:bold;
+margin-left:auto;
+}
+
+.wrapper{
+display:flex;
+min-height:100vh;
+}
+
+.sidebar{
+width:220px;
+background:#000;
+padding:25px 15px;
+position:fixed;
+top:0;
+left:0;
+bottom:0;
+}
+
+.logo{
+width:140px;
+display:block;
+margin:auto;
+margin-bottom:30px;
+}
+
+.sidebar a{
+display:flex;
+align-items:center;
+gap:10px;
+text-decoration:none;
+color:white;
+padding:16px 18px;
+border-radius:12px;
+margin-bottom:12px;
+font-size:15px;
+}
+
+.sidebar a:hover{
+background:#2d2d2d;
+}
+
+.sidebar .active{
+background:white;
+color:black;
+font-weight:bold;
+}
+
+.content{
+margin-left:250px;
+width:100%;
+padding:30px;
+display:flex;
+justify-content:center;
+}
+
+.attendance-card{
+width:1200px;
+background:#000;
+border-radius:25px;
+padding:35px;
+box-shadow:0 12px 35px rgba(0,0,0,.35);
+height: 570px;
+}
+
+.subtitle{
+text-align:center;
+color:#a6a6a6;
+font-size:32px;
+margin-bottom:35px;
+}
+
+label{
+color:white;
+font-weight:bold;
+margin-bottom:8px;
+}
+
+.form-control,
+.form-select{
+height:50px;
+border-radius:18px;
+border:none;
+font-size:18px;
+}
+
+.save-btn{
+width:100%;
+height:50px;
+border:none;
+border-radius:22px;
+background:linear-gradient(to right,#ffffff,#bfbfbf);
+font-size:18px;
+font-weight:bold;
+color:black;
+}
+
+.footer{
+text-align:center;
+color:#777;
+margin-top:25px;
+}
+
+/* Select2 Styling */
+
+.select2-container{
+    width:100% !important;
+}
+
+.select2-container--default .select2-selection--single{
+
+    height:50px;
+    border-radius:18px;
+    border:none;
+    display:flex;
+    align-items:center;
+    padding-left:12px;
+    font-size:18px;
+}
+
+.select2-selection__rendered{
+
+    line-height:46px !important;
+}
+
+.select2-selection__arrow{
+
+    height:50px !important;
+}
+
+.select2-dropdown{
+
+    border-radius:15px;
+}
+
+.select2-search__field{
+
+    height:38px;
+    font-size:17px;
+}
+
+.menu-btn{
+display:none;
+background:white;
+border:none;
+font-size:25px;
+width:40px;
+height:40px;
+border-radius:8px;
+font-weight:bold;
+}
+
+.close-btn{
+display:none;
+color:white;
+font-size:28px;
+text-align:right;
+cursor:pointer;
+margin-bottom:20px;
+}
+
+@media(max-width:768px){
+
+.navbar{
+height:70px;
+padding:0 12px;
+}
+
+.company-name{
+position:absolute;
+left:50%;
+transform:translateX(-50%);
+font-size:18px;
+margin:0;
+letter-spacing:2px;
+text-align:center;
+white-space:nowrap;
+}
+
+.menu-btn{
+display:block;
+}
+
+.sidebar{
+position:fixed;
+left:-250px;
+top:0;
+width:220px;
+height:100%;
+z-index:1000;
+transition:0.3s;
+}
+
+.sidebar.show{
+left:0;
+}
+
+.close-btn{
+display:block;
+}
+
+.content{
+margin-left:0;
+padding:15px;
+}
+
+.attendance-card{
+width:100%;
+height:auto;
+padding:20px;
+}
+
+.subtitle{
+font-size:20px;
+}
+
+label{
+font-size:14px;
+}
+
+.form-control,
+.form-select{
+height:45px;
+font-size:15px;
+}
+
+.save-btn{
+height:45px;
+font-size:16px;
+}
+
+.footer{
+font-size:14px;
+}
+}
+
+</style>
+
+</head>
+
+<body>
+
+<nav class="navbar">
+
+<button class="menu-btn" onclick="toggleSidebar()">
+☰
+</button>
+
+<h2 class="company-name">
+AURA SOLUTIONS
+</h2>
+
+<a href="{{ url_for('auth.admin_login') }}" class="logout-btn">
+Logout
+</a>
+
+</nav>
+
+<div class="wrapper">
+
+<div class="sidebar" id="sidebar">
+<div class="close-btn" onclick="toggleSidebar()">
+✕
+</div>
+
+<img src="{{ url_for('static', filename='logo.jpg') }}" class="logo">
+
+<a href="{{ url_for('admin.welcome') }}" >
+ <i class="bi bi-house-fill"></i> HOME
+</a>
+
+<a href="{{ url_for('admin.add_user') }}">
+<i class="bi bi-person-plus-fill"></i> ADD USER
+</a>
+
+<a href="{{ url_for('admin.attendance') }}"class="active">
+<i class="bi bi-calendar-check-fill"></i> ATTENDANCE
+</a>
+
+<a href="{{ url_for('admin.leave_manage') }}" >
+<i class="bi bi-journal-text"></i> LEAVE MANAGE
+</a>
+
+<a href="{{ url_for('admin.employee_list') }} ">
+<i class="bi bi-people-fill"></i> EMPLOYEE LIST
+</a>
+
+<a href="{{ url_for('admin.dashboard') }}">
+<i class="bi bi-speedometer2"></i> DASHBOARD
+</a>
+
+</div>
+
+<div class="content">
+
+<div class="attendance-card">
+
+<p class="subtitle">
+ATTENDANCE MANAGEMENT
+</p>
+
+
+
+{% with messages = get_flashed_messages() %}
+    {% if messages %}
+        <div class="alert alert-success text-center fw-bold" id="success-alert">
+            {{ messages[0] }}
+        </div>
+    {% endif %}
+{% endwith %}
+
+<form action="{{ url_for('admin.save_attendance') }}" method="POST">
+
+<div class="row">
+
+<div class="col-md-6 mb-3">
+
+<label>EMPLOYEE :</label>
+
+<select
+    class="form-select employee-select"
+    name="employee_id"
+    required>
+
+    <option value=""></option>
+
+    {% for employee in employees %}
+
+    <option value="{{ employee[0] }}">
+        {{ employee[1] }} {{ employee[2] }}
+    </option>
+
+    {% endfor %}
+
+</select>
+
+</div>
+
+<div class="col-md-6 mb-3">
+
+<label>DATE :</label>
+
+<input
+type="date"
+class="form-control"
+name="attendance_date"
+required>
+
+</div>
+
+</div>
+
+<div class="row">
+
+<div class="col-md-6 mb-3">
+
+<label>CHECK IN :</label>
+
+<input
+type="time"
+class="form-control"
+name="check_in">
+
+</div>
+
+<div class="col-md-6 mb-3">
+
+<label>CHECK OUT :</label>
+
+<input
+type="time"
+class="form-control"
+name="check_out">
+
+</div>
+
+</div>
+
+<div class="row">
+
+<div class="col-md-12 mb-3">
+
+<label>STATUS :</label>
+
+<select
+class="form-select"
+name="status">
+
+<option>Present</option>
+<option>Absent</option>
+<option>Late</option>
+<option>Half Day</option>
+
+</select>
+
+</div>
+
+</div> <br> <br>
+
+<button
+type="submit"
+class="save-btn">
+
+SAVE ATTENDANCE
+
+</button>
+
+</form>
+
+<div class="footer">
+Find Your Solutions
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<script>
+setTimeout(function() {
+
+    let alertBox = document.getElementById("success-alert");
+
+    if(alertBox){
+
+        alertBox.style.transition = "0.5s";
+        alertBox.style.opacity = "0";
+
+        setTimeout(function(){
+            alertBox.style.display = "none";
+        }, 500);
+
+    }
+
+}, 3000);
+</script>
+
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+<script>
+$(document).ready(function () {
+
+    $('.employee-select').select2({
+
+        placeholder: "🔍 Search Employee",
+
+        allowClear: true,
+
+        width: "100%"
+
+    });
+
+});
+</script>
+
+
+<script>
+function toggleSidebar() {
+    alert("Button Clicked");
+    document.getElementById("sidebar").classList.toggle("show");
+}
+</script>
+
+</body>
+
+</html>

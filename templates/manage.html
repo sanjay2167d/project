@@ -1,0 +1,984 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+<link rel="stylesheet" href="{{ url_for('static', filename='loader.css') }}">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Employee Management</title>
+<link rel="stylesheet"
+href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<style>
+
+    .logout-btn{
+
+    background:white;
+
+    color:black;
+
+    padding:10px 22px;
+
+    border-radius:10px;
+
+    text-decoration:none;
+
+    font-weight:bold;
+
+    transition:.3s;
+
+}
+
+.logout-btn:hover{
+
+    background:#d9d9d9;
+
+    color:black;
+
+    transform:translateY(-2px);
+
+}
+
+    .company-name{
+    position:absolute;
+    left:50%;
+    transform:translateX(-50%);
+    color:#ffffff;
+    font-size:45px;
+    font-weight:900;
+    letter-spacing:8px;
+    text-transform:uppercase;
+    margin:0;
+    text-align:center;
+    white-space:nowrap;
+}
+
+
+    .navbar{
+    background:#000;
+    height:140px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:0 40px;
+    position:relative;
+}
+
+.nav-left{
+    width:250px;
+}
+.nav-right{
+    margin-left:auto;
+}
+
+.nav-center{
+    flex:1;
+    display:flex;
+    justify-content:center;
+    color: #ffffff;
+}
+
+.content{
+    margin-left:250px;   /* sidebar width only */
+    padding:30px;
+}
+
+.employee-card{
+    width:100%;
+    max-width:1200px;
+    margin:0 auto;       /* centers the form */
+}
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial,Helvetica,sans-serif;
+}
+
+body{
+background:#f4f4f4;
+}
+
+/*==========================
+      PAGE LAYOUT
+==========================*/
+
+.wrapper{
+display:flex;
+min-height:100vh;
+}
+
+/*==========================
+      SIDEBAR
+==========================*/
+
+
+
+.sidebar-title{
+
+color:white;
+text-align:center;
+font-size:15px;
+font-weight:bold;
+margin-bottom:35px;
+width: 100px;
+
+
+}
+
+.sidebar a{
+
+display:flex;
+align-items:center;
+gap:10px;
+
+text-decoration:none;
+color:white;
+
+padding:16px 18px;
+
+border-radius:12px;
+
+margin-bottom:12px;
+
+font-size:15px;
+
+transition:.3s;
+
+}
+
+.sidebar a:hover{
+
+background:#2d2d2d;
+padding-left:25px;
+
+}
+
+.sidebar .active{
+
+background:white;
+color:black;
+font-weight:bold;
+
+}
+
+
+/*==========================
+      CONTENT
+==========================*/
+
+/* Desktop */
+.sidebar{
+    width:250px;
+    height:100vh;
+    position:fixed;
+    left:0;
+    top:0;
+    background:#000;
+    z-index:1000;
+    transition:0.3s;
+}
+
+.content{
+    margin-left:250px;
+    width:calc(100% - 250px);
+}
+
+/* Mobile */
+.menu-btn{
+    display:none;
+}
+
+@media (max-width:768px){
+
+    .sidebar{
+        left:-250px;
+    }
+
+    .sidebar.active{
+        left:0;
+    }
+
+    .content{
+        margin-left:0;
+        width:100%;
+        padding:15px;
+    }
+
+    .menu-btn{
+        display:block;
+        position:fixed;
+        top:15px;
+        left:15px;
+        z-index:1100;
+        background:#fff;
+        color:#000;
+        border:none;
+        padding:8px 12px;
+        border-radius:8px;
+        font-size:20px;
+    }
+
+    .navbar{
+        padding-left:70px;
+    }
+}
+
+
+/*==========================
+    EMPLOYEE CARD
+==========================*/
+
+.employee-card{
+
+
+    width:100%;
+    max-width:1200px;
+
+background:#000;
+border-radius:25px;
+padding:35px;
+box-shadow:0 12px 35px rgba(0,0,0,.35);
+background:linear-gradient(145deg,#000,#111);
+
+border:1px solid rgba(255,255,255,.08);
+box-shadow:
+
+0 25px 60px rgba(0,0,0,.45);
+
+}
+.logo img {
+    width: 150px;   /* reduce logo size */
+    height: auto;
+}
+
+
+.logo{
+
+display:block;
+/* margin:auto; */
+width:140px;
+margin-bottom:25px;
+margin-left: 25px;
+
+}
+
+.subtitle{
+
+text-align:center;
+color:#a6a6a6;
+font-size:32px;
+margin-bottom:35px;
+
+}
+
+label{
+
+color:white;
+font-weight:bold;
+margin-bottom:8px;
+
+}
+
+.form-control,
+.form-select{
+
+height:50px;
+border-radius:18px;
+border:none;
+font-size:18px;
+
+}
+
+.form-control:focus,
+.form-select:focus{
+
+box-shadow:0 0 10px rgba(255,255,255,.25);
+
+}
+
+textarea.form-control{
+
+height:50px;
+resize:none;
+
+}
+
+.gender{
+
+color:white;
+margin-top:10px;
+
+}
+
+.gender input{
+
+margin-right:8px;
+
+}
+
+.save-btn{
+
+width:48%;
+height:45px;
+border:none;
+border-radius:22px;
+
+background:linear-gradient(to right,#ffffff,#bfbfbf);
+
+font-size:18px;
+font-weight:bold;
+color:black;
+
+transition:.3s;
+
+}
+
+.reset-btn{
+
+width:48%;
+height:45px;
+border:none;
+border-radius:22px;
+
+background:#222;
+color:white;
+font-size:18px;
+font-weight:bold;
+
+transition:.3s;
+
+}
+
+.save-btn:hover,
+.reset-btn:hover{
+
+transform:translateY(-3px);
+
+}
+
+.footer{
+
+text-align:center;
+color:#777;
+margin-top:30px;
+letter-spacing:2px;
+
+}
+
+/* ================================= */
+/* RESPONSIVE */
+/* ================================= */
+
+@media (max-width:768px){
+
+    .navbar{
+        display:flex;
+        justify-content:space-between;
+        align-items:center;
+        padding:10px 15px;
+    }
+
+    .logo{
+        width:60px;
+        height:auto;
+    }
+
+    .company-name{
+        font-size:18px;
+        margin:0;
+    }
+
+    .logout-btn{
+        padding:8px 12px;
+        font-size:14px;
+    }
+}
+
+
+@media (max-width:992px){
+
+    .navbar{
+        display:flex;
+        flex-direction:row;
+        justify-content:space-between;
+        align-items:center;
+        padding:15px;
+        flex-wrap:wrap;
+        height:auto;
+    }
+
+    .nav-left{
+        width:auto;
+        display:flex;
+        justify-content:flex-start;
+    }
+
+    .logo{
+        width:80px;
+        height:auto;
+    }
+
+    .nav-center{
+        flex:1;
+        text-align:center;
+    }
+
+    .company-name{
+        position:absolute;
+        left:50%;
+        transform:translateX(-50%);
+        margin:0;
+        font-size:24px;
+        letter-spacing:2px;
+        text-align:center;
+        white-space:nowrap;
+    }
+
+    .nav-right{
+        width:auto;
+        display:flex;
+        justify-content:flex-end;
+        margin-left:auto;
+    }
+
+    .content{
+        margin-left:0;
+        width:100%;
+        padding:15px;
+    }
+}
+
+@media (max-width:576px){
+
+    .logo{
+        width:60px;
+    }
+
+    .company-name{
+        position:absolute;
+        left:50%;
+        transform:translateX(-50%);
+        font-size:16px;
+        letter-spacing:1px;
+        margin:0;
+        text-align:center;
+        white-space:nowrap;
+    }
+}
+
+.overlay{
+display:none;
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:rgba(0,0,0,0.5);
+z-index:9998;
+}
+
+.overlay.show{
+display:block;
+}
+
+/* Desktop */
+.menu-btn{
+display:none;
+}
+
+.sidebar{
+width:250px;
+height:100vh;
+position:fixed;
+left:0;
+top:0;
+background:#000;
+z-index:1000;
+}
+
+/* Mobile Only */
+@media (max-width:768px){
+
+.menu-btn{
+display:block;
+background:white;
+border:none;
+width:42px;
+height:42px;
+border-radius:10px;
+font-size:28px;
+line-height:1;
+cursor:pointer;
+position:fixed;
+top:15px;
+left:15px;
+z-index:1100;
+}
+
+.sidebar{
+left:-250px;
+transition:left .35s ease;
+}
+
+.sidebar.show{
+left:0;
+}
+
+}
+
+
+.close-btn{
+display:none;
+}
+
+@media(max-width:768px){
+
+.close-btn{
+display:block;
+font-size:22px;
+color:white;
+text-align:right;
+padding:10px;
+cursor:pointer;
+}
+
+}
+/* Hide on desktop */
+.menu-btn{
+    display:none;
+}
+
+/* Show only on mobile */
+@media (max-width:768px){
+
+    .menu-btn{
+        display:block !important;
+        position:fixed;
+        top:10px;
+        left:10px;
+        z-index:2000;
+        background:white;
+        border:none;
+        border-radius:8px;
+        width:45px;
+        height:45px;
+        font-size:24px;
+        cursor:pointer;
+    }
+
+}
+
+</style>
+
+
+
+<body>
+
+    <nav class="navbar">
+
+    <!-- Logo -->
+    
+
+    <!-- Company Name -->
+    <div class="nav-center">
+        <h2 class="company-name">
+            AURA SOLUTIONS
+        </h2>
+    </div>
+
+    <!-- Logout -->
+    <div class="nav-right">
+        <a href="{{ url_for('auth.admin_login') }}" class="logout-btn">
+            Logout
+        </a>
+    </div>
+
+</nav>
+
+
+<div class="wrapper">
+
+    <button class="menu-btn" onclick="toggleSidebar()">
+    <i class="bi bi-list"></i>
+</button>
+
+
+<div class="overlay" id="overlay" onclick="toggleSidebar()"></div>
+
+<div class="sidebar" id="sidebar">
+
+<div class="close-btn" onclick="toggleSidebar()">
+    <i class="bi bi-x-lg"></i>
+</div>
+
+<div class="sidebar-title">
+    <img src="{{ url_for('static', filename='logo.jpg') }}" class="logo">
+
+
+ 
+</div>
+
+
+
+<a href="{{ url_for('admin.welcome') }}">
+    <i class="bi bi-house-fill"></i>
+  HOME
+</a>   
+
+<a href="{{ url_for('admin.add_user') }}" class="active">
+<i class="bi bi-person-plus-fill"></i> ADD USER
+</a>
+
+
+<a href="{{ url_for('admin.attendance') }}">
+<i class="bi bi-calendar-check-fill"></i> ATTENDANCE
+</a>
+
+
+
+<a href="#">
+<i class="bi bi-journal-text"></i> LEAVE MANAGE
+</a>
+
+<a href="{{ url_for('admin.employee_list') }}">
+<i class="bi bi-people-fill"></i> EMPLOYEE LIST
+</a>
+
+<a href="{{ url_for('admin.dashboard') }}">
+<i class="bi bi-speedometer2"></i>DASHBOARD
+</a>
+
+</div>
+
+<div class="content">
+
+<div class="employee-card">
+
+
+
+<p class="subtitle">
+
+EMPLOYEE MANAGEMENT
+
+</p>
+
+{% with messages = get_flashed_messages() %}
+    {% if messages %}
+        <div class="alert alert-success text-center fw-bold" id="success-alert">
+            {{ messages[0] }}
+        </div>
+    {% endif %}
+{% endwith %}
+
+
+<form action="{% if employee %}{{ url_for('admin.update_employee') }}{% else %}{{ url_for('admin.save_employee') }}{% endif %}" method="POST">
+
+    <input
+type="hidden"
+name="id"
+value="{{ employee[0] if employee else '' }}">
+
+    <div class="row">
+
+
+<div class="col-md-6 mb-3">
+
+<label>FIRST NAME :</label>
+
+<input
+type="text"
+class="form-control"
+name="firstname"
+value="{{ employee[1] if employee else '' }}"
+placeholder="Enter First Name"
+required>
+
+</div>
+
+<div class="col-md-6 mb-3">
+
+<label>LAST NAME :</label>
+
+<input
+type="text"
+class="form-control"
+name="lastname"
+value="{{ employee[2] if employee else '' }}"
+placeholder="Enter Last Name"
+required>
+
+</div>
+</div>
+<div  class="row">
+
+<div class="col-md-6 mb-3">
+
+<label>AGE :</label>
+
+
+
+<input type="number" name="age"  placeholder="Enter The age" value="{{ employee[13] if employee else '' }}" class="form-control" required>
+
+
+
+
+
+
+
+</div>
+
+<div class="col-md-6 mb-3">
+
+<label>DATE OF BIRTH :</label>
+
+<input
+type="date"
+class="form-control"
+name="dob"
+value="{{ employee[4] if employee else '' }}"
+required>
+
+</div>
+</div>
+<div class="row">
+
+<div class="col-md-6 mb-3">
+
+<label>PHONE :</label>
+
+<input
+type="number"
+class="form-control"
+name="phone"
+value="{{ employee[5] if employee else '' }}"
+placeholder="Enter Phone Number"
+required>
+
+</div>
+
+<div class="col-md-6 mb-3">
+
+<label>E-MAIL :</label>
+
+<input
+type="email"
+class="form-control"
+name="email"
+value="{{ employee[6] if employee else '' }}"
+placeholder="Enter Email Address"
+required>
+
+</div>
+</div>
+<div class="row">
+
+<div class="col-md-6 mb-3">
+
+<label>ADDRESS :</label>
+
+<textarea
+class="form-control"
+name="address"
+placeholder="Enter Address">{{ employee[7] if employee else '' }}</textarea>
+
+</div>
+
+<div class="col-md-6 mb-3">
+
+<label>DEPARTMENT :</label>
+
+<select
+class="form-select"
+name="department"
+required>
+
+<option value="">Select Department</option>
+<option>Human Resources</option>
+<option>Finance</option>
+<option>Marketing</option>
+<option>Sales</option>
+<option>Information Technology</option>
+<option>Operations</option>
+
+</select>
+
+</div>
+</div>
+<div class="row">
+
+<div class="col-md-6 mb-3">
+
+<label>DESIGNATION :</label>
+
+<input
+type="text"
+class="form-control"
+name="designation"
+value="{{ employee[9] if employee else '' }}"
+placeholder="Enter Designation"
+required>
+
+</div>
+
+<div class="col-md-6 mb-3">
+
+<label>JOINING DATE :</label>
+
+<input
+type="date"
+class="form-control"
+name="joining_date"
+value="{{ employee[10] if employee else '' }}"
+required>
+
+</div>
+</div>
+<div class="row">
+<div class="col-md-6 mb-3">
+
+<label>SALARY :</label>
+
+<input
+type="number"
+class="form-control"
+name="salary"
+value="{{ employee[11] if employee else '' }}"
+placeholder="Enter Salary"
+required>
+
+</div>
+
+<div class="col-md-6 mb-3">
+
+<label>STATUS :</label>
+
+<select
+class="form-select"
+name="status"
+required>
+
+<option value="">Select Status</option>
+<option>Active</option>
+<option>Inactive</option>
+<option>On Leave</option>
+
+</select>
+
+</div>
+</div>
+<div class="row">
+<div class="col-md-6 mb-3">
+
+<label>ROLE ID :</label>
+
+<input
+type="text"
+class="form-control"
+name="role_id"
+value="{{ employee[16] if employee else '' }}"
+placeholder="Enter Role ID"
+required>
+
+</div>
+<div class="col-md-6 mb-3">
+
+<label>GENDER :</label>
+
+<div class="gender">
+
+<input type="radio" name="gender" value="Male" required>
+
+Male
+
+&nbsp;&nbsp;&nbsp;
+
+<input type="radio" name="gender" value="Female">
+
+Female
+ <br>
+ </div>
+ </div> <br> <br>
+
+<div class="d-flex justify-content-between">
+
+<button
+type="submit"
+class="save-btn">
+
+SAVE
+
+</button>
+
+<button
+type="reset"
+class="reset-btn">
+
+RESET
+
+</button>
+
+</div>
+
+</form>
+
+<div class="footer">
+
+Find Your Solutions
+
+</div>
+
+</div> <!-- employee-card -->
+
+</div> <!-- content -->
+
+</div> <!-- wrapper -->
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="{{ url_for('static', filename='loader.js') }}"></script>
+<div id="loader">
+
+    <div class="loader-box">
+
+        <img src="{{ url_for('static', filename='logo.jpg') }}" class="loader-logo">
+
+        <div class="spinner"></div>
+
+        <div class="loading-text">
+            Loading...
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+setTimeout(function() {
+    let alertBox = document.getElementById("success-alert");
+
+    if(alertBox){
+        alertBox.style.transition = "0.5s";
+        alertBox.style.opacity = "0";
+
+        setTimeout(() => {
+            alertBox.style.display = "none";
+        }, 500);
+    }
+}, 3000);
+</script>
+
+</body>
+
+<script>
+function toggleSidebar(){
+    document.getElementById("sidebar").classList.toggle("show");
+    document.getElementById("overlay").classList.toggle("show");
+}
+</script>
+
+</html>

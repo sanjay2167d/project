@@ -1,0 +1,1591 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Aura Solutions | Dashboard</title>
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<link rel="stylesheet"
+href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:"Segoe UI",Tahoma,Geneva,Verdana,sans-serif;
+}
+
+body{
+    background:#ececec;
+    overflow-x:hidden;
+}
+
+/*================ NAVBAR ================*/
+
+.navbar{
+    position:fixed;
+    top:0;
+    left:0;
+    right:0;
+
+    min-height:90px;
+
+    background:black;
+
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+
+    padding:15px 25px;
+
+    z-index:999;
+
+    box-shadow:0 12px 30px rgba(0,0,0,.35);
+}
+
+.logo-title{
+
+    display:flex;
+    align-items:center;
+    gap:18px;
+
+}
+
+.logo-title img{
+
+    width:100px;
+    height:100px;
+
+    border-radius:50%;
+    object-fit:cover;
+
+    border:3px solid white;
+
+}
+
+.company-name{
+    position:absolute;
+    left:50%;
+    transform:translateX(-50%);
+    color:white;
+    font-size:38px;
+    font-weight:900;
+    letter-spacing:4px;
+    margin:0;
+    text-transform:uppercase;
+    text-align:center;
+    white-space:nowrap;
+}
+
+.logo-title p{
+    color:#9b9b9b;
+    font-size:14px;
+    margin:0;
+}
+
+/*================ NAV RIGHT ================*/
+
+.nav-right{
+
+    display:flex;
+    align-items:center;
+    gap:25px;
+
+}
+
+.clock{
+
+    text-align:right;
+
+}
+
+.clock #date{
+
+    color:#d8d8d8;
+    font-size:14px;
+
+}
+
+.clock #time{
+
+    color:white;
+    font-size:22px;
+    font-weight:bold;
+
+}
+
+/*================ NOTIFICATION ================*/
+
+.notification-btn{
+
+    width:52px;
+    height:52px;
+
+    border:none;
+
+    border-radius:50%;
+
+    background:white;
+
+    font-size:22px;
+
+    transition:.35s;
+
+}
+
+.notification-btn:hover{
+
+    transform:rotate(15deg) scale(1.08);
+
+    background:#f3f3f3;
+
+}
+
+/*================ LOGOUT ================*/
+
+.logout-btn{
+
+    text-decoration:none;
+
+    background:white;
+    color:black;
+
+    padding:12px 24px;
+
+    border-radius:12px;
+
+    font-weight:bold;
+
+    transition:.3s;
+
+}
+
+.logout-btn:hover{
+
+    background:#dcdcdc;
+
+    color:black;
+
+    transform:translateY(-2px);
+
+}
+
+/*================ WRAPPER ================*/
+
+.wrapper{
+
+    display:flex;
+
+}
+
+/*================ SIDEBAR ================*/
+
+.sidebar{
+
+    position:fixed;
+
+    top:90px;
+    left:0;
+    bottom:0;
+
+    width:250px;
+
+    background:#000000;
+
+    padding:30px 18px;
+
+    overflow-y:auto;
+
+}
+
+.sidebar a{
+
+    display:flex;
+    align-items:center;
+
+    gap:15px;
+
+    text-decoration:none;
+
+    color:white;
+
+    padding:18px;
+
+    border-radius:14px;
+
+    margin-bottom:15px;
+
+    transition:.35s;
+
+    font-size:17px;
+
+}
+
+.sidebar a i{
+
+    font-size:22px;
+
+}
+
+.sidebar a:hover{
+
+    background:#1f1f1f;
+
+    padding-left:28px;
+
+}
+
+.sidebar .active{
+
+    background:white;
+
+    color:black;
+
+    font-weight:bold;
+
+}
+
+/*================ CONTENT ================*/
+
+.content{
+
+    margin-left:250px;
+
+    margin-top:90px;
+
+    width:100%;
+
+    padding:35px;
+
+}
+
+/*================ HERO ================*/
+
+.hero{
+
+    background:linear-gradient(135deg,#000,#1b1b1b);
+
+    border-radius:25px;
+
+    padding:40px;
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    color:white;
+
+    box-shadow:0 18px 40px rgba(0,0,0,.30);
+
+}
+
+.hero h1{
+
+    font-size:42px;
+
+    font-weight:900;
+
+}
+
+.hero p{
+
+    margin-top:8px;
+
+    color:#bfbfbf;
+
+    font-size:18px;
+
+}
+
+#liveClock{
+
+    font-size:42px;
+
+    font-weight:bold;
+
+}
+
+/*================ STATS ================*/
+
+.stat-card{
+
+    background:white;
+
+    border-radius:22px;
+
+    padding:25px;
+
+    display:flex;
+
+    align-items:center;
+
+    gap:22px;
+
+    box-shadow:0 10px 25px rgba(0,0,0,.12);
+
+    transition:.35s;
+
+    height:145px;
+
+}
+
+.stat-card:hover{
+
+    transform:translateY(-8px);
+
+    box-shadow:0 20px 45px rgba(0,0,0,.22);
+
+}
+
+.stat-icon{
+
+    width:75px;
+    height:75px;
+
+    background:black;
+
+    border-radius:18px;
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+
+    color:white;
+
+    font-size:34px;
+
+}
+
+.stat-card h5{
+
+    color:#777;
+
+    margin-bottom:6px;
+
+    font-size:17px;
+
+}
+
+.stat-card h2{
+
+    font-size:42px;
+
+    font-weight:900;
+
+    color:black;
+
+}
+
+/*================ CARD BOX =================*/
+
+.card-box{
+
+    background:rgba(255,255,255,.95);
+
+    border-radius:22px;
+
+    padding:28px;
+
+    box-shadow:0 12px 35px rgba(0,0,0,.12);
+
+    transition:.35s;
+
+    height:400px;
+
+}
+
+.card-box:hover{
+
+    transform:translateY(-5px);
+
+    box-shadow:0 20px 45px rgba(0,0,0,.18);
+
+}
+
+.card-box h4{
+
+    font-size:24px;
+
+    font-weight:700;
+
+    margin-bottom:25px;
+
+    color:#111;
+
+}
+
+/*================ TABLE =================*/
+
+.table{
+
+    margin-bottom:0;
+
+}
+
+.table thead{
+
+    background:black;
+
+    color:white;
+
+}
+
+.table thead th{
+
+    border:none;
+
+    padding:15px;
+
+    font-size:15px;
+
+    text-transform:uppercase;
+
+    letter-spacing:1px;
+
+}
+
+.table tbody td{
+
+    padding:14px;
+
+    vertical-align:middle;
+
+    font-size:15px;
+
+}
+
+.table tbody tr{
+
+    transition:.25s;
+
+}
+
+.table tbody tr:hover{
+
+    background:#f5f5f5;
+
+}
+
+/*================ STATUS BADGES =================*/
+
+.badge{
+
+    padding:8px 15px;
+
+    border-radius:30px;
+
+    font-size:13px;
+
+    font-weight:600;
+
+}
+
+/*================ CHART =================*/
+
+canvas{
+
+    width:100% !important;
+
+    max-height:340px;
+
+}
+
+/*================ QUICK ACTION =================*/
+
+.action-btn{
+
+    display:block;
+
+    background:black;
+
+    color:white;
+
+    text-decoration:none;
+
+    border-radius:20px;
+
+    padding:30px 15px;
+
+    transition:.35s;
+
+}
+
+.action-btn:hover{
+
+    transform:translateY(-8px);
+
+    background:#222;
+
+    color:white;
+
+}
+
+.action-btn i{
+
+    font-size:40px;
+
+    display:block;
+
+    margin-bottom:15px;
+
+}
+
+.action-btn p{
+
+    margin:0;
+
+    font-weight:bold;
+
+    font-size:17px;
+
+}
+
+/*================ DROPDOWN =================*/
+
+.dropdown-menu{
+
+    border:none;
+
+    border-radius:15px;
+
+    overflow:hidden;
+
+    box-shadow:0 15px 35px rgba(0,0,0,.18);
+
+}
+
+.dropdown-item{
+
+    padding:15px;
+
+    transition:.25s;
+
+}
+
+.dropdown-item:hover{
+
+    background:black;
+
+    color:white;
+
+}
+
+/*================ SCROLLBAR =================*/
+
+::-webkit-scrollbar{
+
+    width:10px;
+
+}
+
+::-webkit-scrollbar-thumb{
+
+    background:#777;
+
+    border-radius:20px;
+
+}
+
+::-webkit-scrollbar-thumb:hover{
+
+    background:#444;
+
+}
+
+/*================ ANIMATION =================*/
+
+.hero,
+.stat-card,
+.card-box{
+
+    animation:fadeUp .8s ease;
+
+}
+
+@keyframes fadeUp{
+
+    from{
+
+        opacity:0;
+
+        transform:translateY(35px);
+
+    }
+
+    to{
+
+        opacity:1;
+
+        transform:translateY(0);
+
+    }
+
+}
+
+/*================ RESPONSIVE =================*/
+/* ================================= */
+/* TABLET */
+/* ================================= */
+/* ================================= */
+/* RESPONSIVE DESIGN */
+/* ================================= */
+
+@media (max-width:992px){
+
+    .sidebar{
+        display:none;
+    }
+
+    .navbar{
+        flex-direction:column;
+        height:auto;
+        padding:20px;
+        gap:15px;
+    }
+
+    .logo-title{
+        flex-direction:column;
+        text-align:center;
+        gap:10px;
+    }
+
+    .logo-title img{
+        width:80px;
+        height:80px;
+    }
+
+    .company-name{
+        position:static;
+        transform:none;
+        font-size:28px;
+        margin:0 auto;
+        letter-spacing:2px;
+        text-align:center;
+    }
+
+    .nav-right{
+        justify-content:center;
+        flex-wrap:wrap;
+        gap:15px;
+    }
+
+    .content{
+        margin-left:0;
+        padding:20px;
+        padding-top:280px;
+    }
+
+    .hero{
+        flex-direction:column;
+        text-align:center;
+        gap:20px;
+        padding:30px;
+    }
+
+    .hero h1{
+        font-size:32px;
+    }
+
+    #liveClock{
+        font-size:32px;
+    }
+
+    .card-box{
+        height:auto;
+    }
+}
+
+@media (max-width:768px){
+
+    .logo-title img{
+        width:70px;
+        height:70px;
+    }
+
+    .logo-title h2{
+        font-size:22px;
+        letter-spacing:1px;
+    }
+
+    .clock{
+        text-align:center;
+    }
+
+    .clock #date{
+        font-size:13px;
+    }
+
+    .clock #time{
+        font-size:18px;
+    }
+
+    .notification-btn{
+        width:45px;
+        height:45px;
+        font-size:18px;
+    }
+
+    .logout-btn{
+        padding:8px 15px;
+        font-size:14px;
+    }
+
+    .content{
+        padding-top:300px;
+    }
+
+    .hero{
+        padding:25px;
+    }
+
+    .hero h1{
+        font-size:24px;
+    }
+
+    .hero p{
+        font-size:15px;
+    }
+
+    #liveClock{
+        font-size:26px;
+    }
+
+    .stat-card{
+        height:auto;
+        flex-direction:column;
+        text-align:center;
+        padding:20px;
+    }
+
+    .stat-card h2{
+        font-size:30px;
+    }
+
+    .stat-icon{
+        width:60px;
+        height:60px;
+        font-size:28px;
+    }
+
+    .card-box{
+        padding:20px;
+        overflow-x:auto;
+    }
+
+    .table{
+        min-width:500px;
+    }
+}
+
+@media (max-width:576px){
+
+    .navbar{
+        position:relative;
+    }
+
+    .content{
+        margin-top:0;
+        padding-top:20px;
+        padding-left:10px;
+        padding-right:10px;
+    }
+
+    .logo-title img{
+        width:60px;
+        height:60px;
+    }
+
+    .logo-title h2{
+        font-size:18px;
+    }
+
+    .clock #date{
+        font-size:12px;
+    }
+
+    .clock #time{
+        font-size:16px;
+    }
+
+    .notification-btn{
+        width:42px;
+        height:42px;
+        font-size:16px;
+    }
+
+    .logout-btn{
+        padding:8px 12px;
+        font-size:13px;
+    }
+
+    .hero{
+        padding:20px;
+    }
+
+    .hero h1{
+        font-size:22px;
+    }
+
+    .hero p{
+        font-size:14px;
+    }
+
+    #liveClock{
+        font-size:22px;
+    }
+
+    .card-box h4{
+        font-size:18px;
+    }
+
+    .action-btn{
+        padding:18px 10px;
+        margin-bottom:15px;
+    }
+
+    .action-btn i{
+        font-size:28px;
+    }
+
+    .action-btn p{
+        font-size:14px;
+    }
+}
+
+</style>
+
+</head>
+
+<body>
+
+<!-- ================= NAVBAR ================= -->
+
+<nav class="navbar">
+
+<div class="logo-title">
+<img src="{{ url_for('static', filename='logo.jpg') }}">
+</div>
+
+<h2 class="company-name">AURA SOLUTIONS</h2>
+
+<div class="nav-right">
+
+<div class="clock">
+
+<div id="date"></div>
+
+<div id="time"></div>
+
+</div>
+
+<div class="dropdown">
+
+<button class="notification-btn"
+data-bs-toggle="dropdown">
+
+<i class="bi bi-bell-fill"></i>
+
+</button>
+
+<ul class="dropdown-menu dropdown-menu-end">
+
+<li>
+
+<a class="dropdown-item"
+href="{{ url_for('admin.leave_requests') }}">
+
+<i class="bi bi-file-earmark-text"></i>
+
+Leave Requests
+
+</a>
+
+</li>
+
+</ul>
+
+</div>
+
+<a href="{{ url_for('auth.admin_login') }}"
+class="logout-btn">
+
+Logout
+
+</a>
+
+</div>
+
+</nav>
+
+<!-- ================= MAIN ================= -->
+
+<div class="wrapper">
+
+<!-- ================= SIDEBAR ================= -->
+
+<div class="sidebar">
+
+<a href="{{ url_for('admin.welcome') }}">
+
+<i class="bi bi-house-fill"></i>
+
+Home
+
+</a>
+
+<a href="{{ url_for('admin.add_user') }}">
+
+<i class="bi bi-person-plus-fill"></i>
+
+Add Employee
+
+</a>
+
+<a href="{{ url_for('admin.attendance') }}">
+
+<i class="bi bi-calendar-check-fill"></i>
+
+Attendance
+
+</a>
+
+<a href="{{ url_for('admin.leave_manage') }}">
+
+<i class="bi bi-journal-text"></i>
+
+Leave
+
+</a>
+
+<a href="{{ url_for('admin.employee_list') }}">
+
+<i class="bi bi-people-fill"></i>
+
+Employees
+
+</a>
+
+<a href="{{ url_for('admin.dashboard') }}"
+class="active">
+
+<i class="bi bi-speedometer2"></i>
+
+Dashboard
+
+</a>
+
+</div>
+
+<!-- ================= CONTENT ================= -->
+
+<div class="content">
+
+<!-- ================= HERO ================= -->
+
+<div class="hero">
+
+<div>
+
+<h1>
+
+Welcome Back 👋
+
+</h1>
+
+<p>
+
+Manage your employees efficiently from one place.
+
+</p>
+
+</div>
+
+<div>
+
+<h2 id="liveClock"></h2>
+
+</div>
+
+</div>
+
+<!-- ================= STATS ================= -->
+
+<div class="row g-4 mt-2">
+
+    <!-- Total Employees -->
+<div class="col-xl-3 col-md-6 col-12">
+
+        <div class="stat-card">
+            <div class="stat-icon">
+                <i class="bi bi-people-fill"></i>
+            </div>
+            <div>
+                <h5>Total Employees</h5>
+                <h2>{{ total_employees }}</h2>
+            </div>
+        </div>
+    </div>
+
+    <!-- Present Today -->
+<div class="col-xl-3 col-md-6 col-12">
+            <div class="stat-card">
+            <div class="stat-icon">
+                <i class="bi bi-check-circle-fill"></i>
+            </div>
+            <div>
+                <h5>Present Today</h5>
+                <h2>{{ present_today }}</h2>
+            </div>
+        </div>
+    </div>
+
+    <!-- Pending Leave -->
+<div class="col-xl-3 col-md-6 col-12">
+           <div class="stat-card">
+            <div class="stat-icon">
+                <i class="bi bi-file-earmark-medical-fill"></i>
+            </div>
+            <div>
+                <h5>Pending Leave</h5>
+                <h2>{{ pending_leave }}</h2>
+            </div>
+        </div>
+    </div>
+
+    <!-- Absent Today -->
+<div class="col-xl-3 col-md-6 col-12">
+            <div class="stat-card">
+            <div class="stat-icon">
+                <i class="bi bi-x-circle-fill"></i>
+            </div>
+            <div>
+                <h5>Absent Today</h5>
+                <h2>{{ absent_today }}</h2>
+            </div>
+        </div>
+    </div>
+
+    <!-- Departments -->
+<div class="col-xl-3 col-md-6 col-12">
+            <div class="stat-card">
+            <div class="stat-icon">
+                <i class="bi bi-building-fill"></i>
+            </div>
+            <div>
+                <h5>Departments</h5>
+                <h2>{{ departments }}</h2>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<!-- ================= CHART AREA ================= -->
+
+<div class="row mt-4">
+
+<div class="col-lg-8">
+
+<div class="card-box">
+
+<h4>
+
+Attendance Analytics
+
+</h4>
+
+<canvas id="attendanceChart"></canvas>
+
+</div>
+
+</div>
+
+<div class="col-lg-4">
+
+<div class="card-box">
+
+<h4>
+
+Departments
+
+</h4>
+
+<canvas id="departmentChart"></canvas>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ================= TABLES ================= -->
+
+<div class="row mt-4">
+
+<div class="col-lg-7">
+
+<div class="card-box">
+
+<h4>
+
+Recent Employees
+
+</h4>
+
+<table class="table">
+
+<thead>
+
+<tr>
+
+<th>ID</th>
+
+<th>Name</th>
+
+<th>Department</th>
+
+<th>Status</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+
+{% for emp in recent_employees %}
+
+<tr>
+
+<td>{{ emp[0] }}</td>
+
+<td>{{ emp[1] }} {{ emp[2] }}</td>
+
+<td>{{ emp[3] }}</td>
+
+<td>{{ emp[5] }}</td>
+
+</tr>
+
+{% endfor %}
+
+</tbody>
+
+</table>
+
+</div>
+
+</div>
+
+<div class="col-lg-5">
+
+<div class="card-box">
+
+<h4>
+
+Recent Leave Requests
+
+</h4>
+
+<table class="table">
+
+<thead>
+
+<tr>
+
+<th>Name</th>
+
+<th>Status</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+
+{% for leave in recent_leaves %}
+
+<tr>
+
+<td>
+
+{{ leave[0] }} {{ leave[1] }}
+
+</td>
+
+<td>
+
+{{ leave[3] }}
+
+</td>
+
+</tr>
+
+{% endfor %}
+
+</tbody>
+
+</table>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ================= QUICK ACTION ================= -->
+
+<div class="card-box mt-4">
+
+<h4>
+
+Quick Actions
+
+</h4>
+
+<div class="row text-center">
+
+<div class="col-lg-3 col-md-6 col-12 mb-3">
+<a href="{{ url_for('admin.add_user') }}" class="action-btn">
+
+<i class="bi bi-person-plus-fill"></i>
+
+<p>Add Employee</p>
+
+</a>
+
+</div>
+
+<div class="col-lg-3 col-md-6 col-12 mb-3">
+<a href="{{ url_for('admin.attendance') }}" class="action-btn">
+
+<i class="bi bi-calendar-check-fill"></i>
+
+<p>Attendance</p>
+
+</a>
+
+</div>
+
+<div class="col-lg-3 col-md-6 col-12 mb-3">
+<a href="{{ url_for('admin.leave_manage') }}" class="action-btn">
+
+<i class="bi bi-journal-text"></i>
+
+<p>Leaves</p>
+
+</a>
+
+</div>
+
+<div class="col-lg-3 col-md-6 col-12 mb-3">
+<a href="{{ url_for('admin.employee_list') }}" class="action-btn">
+
+<i class="bi bi-people-fill"></i>
+
+<p>Employees</p>
+
+</a>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- Bootstrap -->
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- Chart JS -->
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+
+/* ===========================
+   LIVE DATE & CLOCK
+=========================== */
+
+function updateClock(){
+
+    const now = new Date();
+
+    const optionsDate = {
+        weekday:'long',
+        day:'numeric',
+        month:'long',
+        year:'numeric'
+    };
+
+    document.getElementById("date").innerHTML =
+        now.toLocaleDateString("en-US", optionsDate);
+
+    document.getElementById("time").innerHTML =
+        now.toLocaleTimeString();
+
+    document.getElementById("liveClock").innerHTML =
+        now.toLocaleTimeString();
+
+}
+
+setInterval(updateClock,1000);
+
+updateClock();
+
+
+/* ===========================
+   COUNTER ANIMATION
+=========================== */
+
+function animateValue(element){
+
+    let finalValue=parseInt(element.innerText);
+
+    let start=0;
+
+    let duration=1500;
+
+    let increment=Math.ceil(finalValue/70);
+
+    let timer=setInterval(function(){
+
+        start+=increment;
+
+        if(start>=finalValue){
+
+            start=finalValue;
+
+            clearInterval(timer);
+
+        }
+
+        element.innerText=start;
+
+    },20);
+
+}
+
+document.querySelectorAll(".stat-card h2").forEach(function(card){
+
+    animateValue(card);
+
+});
+
+
+/* ===========================
+   ATTENDANCE CHART
+=========================== */
+
+const attendance=document.getElementById("attendanceChart");
+
+new Chart(attendance,{
+
+type:'line',
+
+data:{
+
+labels:[
+'Mon',
+'Tue',
+'Wed',
+'Thu',
+'Fri',
+'Sat',
+'Sun'
+],
+
+datasets:[{
+
+label:'Attendance',
+
+data:[
+52,
+61,
+48,
+67,
+72,
+65,
+58
+],
+
+borderWidth:4,
+
+fill:true,
+
+tension:.4,
+
+backgroundColor:"rgba(0,0,0,.12)",
+
+borderColor:"#000",
+
+pointRadius:6,
+
+pointBackgroundColor:"#000"
+
+}]
+
+},
+
+options:{
+
+responsive:true,
+
+plugins:{
+
+legend:{
+
+display:false
+
+}
+
+},
+
+scales:{
+
+y:{
+
+beginAtZero:true
+
+}
+
+}
+
+}
+
+});
+
+
+/* ===========================
+   DEPARTMENT CHART
+=========================== */
+
+const department=document.getElementById("departmentChart");
+
+new Chart(department,{
+
+type:'doughnut',
+
+data:{
+
+labels:[
+
+'HR',
+
+'Finance',
+
+'IT',
+
+'Operations',
+
+'Marketing'
+
+],
+
+datasets:[{
+
+data:[
+
+15,
+
+18,
+
+30,
+
+12,
+
+10
+
+],
+
+backgroundColor:[
+
+'#000',
+
+'#444',
+
+'#777',
+
+'#AAAAAA',
+
+'#DDDDDD'
+
+],
+
+borderWidth:0
+
+}]
+
+},
+
+options:{
+
+plugins:{
+
+legend:{
+
+position:'bottom'
+
+}
+
+},
+
+cutout:'65%'
+
+}
+
+});
+
+
+/* ===========================
+   CARD HOVER EFFECT
+=========================== */
+
+document.querySelectorAll(".stat-card").forEach(function(card){
+
+card.addEventListener("mouseenter",function(){
+
+card.style.transform="translateY(-10px) scale(1.02)";
+
+});
+
+card.addEventListener("mouseleave",function(){
+
+card.style.transform="translateY(0px)";
+
+});
+
+});
+
+
+/* ===========================
+   HERO FADE
+=========================== */
+
+window.onload=function(){
+
+document.querySelector(".hero").style.opacity="1";
+
+}
+
+</script>
+
+</body>
+</html>
+</body>
+
+</html>
